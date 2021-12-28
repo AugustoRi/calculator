@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 html, body{
@@ -30,9 +31,18 @@ html, body{
   padding: 10% 5%;
 }
 
+header{
+  text-align: right;
+}
+
 header h1{
   color: #EAF3F5;
-  text-align: right;
+  font-size: 3em;
+}
+
+header span{
+  color: #66727E;
+  font-size: 1em;
 }
 
 main{
@@ -56,4 +66,8 @@ main{
 
 .calculadora-wrap button:hover{
   cursor: pointer;
+}
+
+.calculadora-wrap .operacoes{
+  color: #838F9A;
 }
