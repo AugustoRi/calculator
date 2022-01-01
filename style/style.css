@@ -68,6 +68,7 @@ main{
   cursor: pointer;
 }
 
-.calculadora-wrap .operacoes{
+.calculadora-wrap .operacoes,
+.calculadora-wrap .limpadores{
   color: #838F9A;
 }

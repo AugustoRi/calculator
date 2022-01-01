@@ -66,3 +66,33 @@ const numerosPressionados = [];
     });
   });
 })();
+
+(function operacoesLimpadoras(){
+  let ce = document.querySelector('#limpa');
+
+  ce.addEventListener('click', ()=>{
+    tela.textContent = 0;
+    numerosPressionados.length = 0;
+  });
+
+  let c = document.querySelector('#limpa-tudo');
+
+  c.addEventListener('click', ()=>{
+    tela.textContent = 0;
+    historicoCalculoAtual.textContent = '';
+    numerosPressionados.length = 0;
+  });
+
+  let backspace = document.querySelector('#backspace');
+
+  backspace.addEventListener('click', ()=>{
+    tela.textContent = '';
+    numerosPressionados.pop();
+    for (let i = 0; i < numerosPressionados.length; i++) {
+      tela.textContent += numerosPressionados[i];
+    }
+    if (numerosPressionados.length == 0) {
+      tela.textContent = 0;
+    }
+  });
+})();
