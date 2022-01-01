@@ -37,3 +37,32 @@ const numerosPressionados = [];
   }); 
   return tela.textContent;
 })();
+
+(function detectarOperacao() {
+  operacoes.forEach(operacao => {
+    operacao.addEventListener('click', ()=>{
+      var primeiroNumeroSemFormatacao = tela.textContent;
+      numerosPressionados.length = 0;
+      switch (operacao.textContent) {
+        case '+':
+          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} +`;
+          break;
+
+        case '-':
+          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} -`;
+          break;
+
+        case 'x':
+          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} x`;
+          break;
+
+        case '/':
+          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} ÷`;
+          break;
+
+        default:
+          break;
+      };
+    });
+  });
+})();
