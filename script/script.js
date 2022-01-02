@@ -61,21 +61,22 @@ function formatadorNumero (numero) {
       let primeiroNumeroSemFormatacao = tela.textContent;
       numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
       numerosPressionados.length = 0;
+      let i = numerosParaCalculo.length - 1;
       switch (operacao.textContent) {
         case '+':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} +`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} +`;
           break;
 
         case '-':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} -`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} -`;
           break;
 
         case 'x':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} x`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} x`;
           break;
 
         case '/':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} ÷`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ÷`;
           break;
 
         default:
@@ -93,13 +94,17 @@ function formatadorNumero (numero) {
     let segundoNumero = tela.textContent;
     numerosParaCalculo.push(formatadorNumero(segundoNumero));
 
-    let resultadoPorcentagem = numerosParaCalculo[1] / numerosParaCalculo[0];
-    
-    let resultadoPorcentagemEmString = resultadoPorcentagem.toString();
+    let primeiroNumeroCalculoPorcentagem = numerosParaCalculo[numerosParaCalculo.length - 2];
+    let segundoNumeroCalculoPorcentagem = numerosParaCalculo[numerosParaCalculo.length - 1];
 
+    let resultadoPorcentagem = segundoNumeroCalculoPorcentagem / primeiroNumeroCalculoPorcentagem;
+    
+    numerosParaCalculo.pop();
+    numerosParaCalculo.push(resultadoPorcentagem);
+
+    let resultadoPorcentagemEmString = resultadoPorcentagem.toString();
     if (resultadoPorcentagemEmString.includes('.')) {
       resultadoPorcentagemEmString = resultadoPorcentagemEmString.replace('.',',');
-      console.log(resultadoPorcentagemEmString);
     }
 
     tela.textContent = resultadoPorcentagemEmString;
