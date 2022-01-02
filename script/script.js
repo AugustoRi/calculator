@@ -3,6 +3,19 @@ const historicoCalculoAtual = document.querySelector('#historico-calculo-atual')
 const numeros = document.querySelectorAll('.numeros');
 const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
+const numerosParaCalculo = [];
+
+function formatadorNumero (numero) {
+  if (numero.includes(',')) {
+    numero = numero.replace(',', '.');
+    numero = parseFloat(numero);
+  }
+  else {
+    numero = parseInt(numero);
+  }
+
+  return numero;
+}; 
 
 (function preencherNumerosPressionados() {
   numeros.forEach(numero => {
@@ -41,23 +54,24 @@ const numerosPressionados = [];
 (function detectarOperacao() {
   operacoes.forEach(operacao => {
     operacao.addEventListener('click', ()=>{
-      var primeiroNumeroSemFormatacao = tela.textContent;
+      let primeiroNumeroSemFormatacao = tela.textContent;
+      numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
       numerosPressionados.length = 0;
       switch (operacao.textContent) {
         case '+':
-          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} +`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} +`;
           break;
 
         case '-':
-          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} -`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} -`;
           break;
 
         case 'x':
-          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} x`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} x`;
           break;
 
         case '/':
-          historicoCalculoAtual.textContent = `${primeiroNumeroSemFormatacao} ÷`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[0]} ÷`;
           break;
 
         default:
@@ -65,6 +79,28 @@ const numerosPressionados = [];
       };
     });
   });
+  return historicoCalculoAtual.textContent;
+})();
+
+(function porcentagem() {
+  let botaoPorcentagem = document.querySelector('#porcentagem');
+
+  botaoPorcentagem.addEventListener('click', ()=>{
+    let segundoNumero = tela.textContent;
+    numerosParaCalculo.push(formatadorNumero(segundoNumero));
+
+    let resultadoPorcentagem = numerosParaCalculo[1] / numerosParaCalculo[0];
+    
+    let resultadoPorcentagemEmString = resultadoPorcentagem.toString();
+
+    if (resultadoPorcentagemEmString.includes('.')) {
+      resultadoPorcentagemEmString = resultadoPorcentagemEmString.replace('.',',');
+      console.log(resultadoPorcentagemEmString);
+    }
+
+    tela.textContent = resultadoPorcentagemEmString;
+  });
+  return tela.textContent;
 })();
 
 (function operacoesLimpadoras(){

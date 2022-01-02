@@ -69,6 +69,7 @@ main{
 }
 
 .calculadora-wrap .operacoes,
-.calculadora-wrap .limpadores{
+.calculadora-wrap .limpadores
+.calculadora-wrap #porcentagem{
   color: #838F9A;
 }
