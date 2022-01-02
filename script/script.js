@@ -64,19 +64,19 @@ function formatadorNumero (numero) {
       let i = numerosParaCalculo.length - 1;
       switch (operacao.textContent) {
         case '+':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} +`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} + `;
           break;
 
         case '-':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} -`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} - `;
           break;
 
         case 'x':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} x`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} x `;
           break;
 
         case '/':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ÷`;
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ÷ `;
           break;
 
         default:
@@ -107,7 +107,16 @@ function formatadorNumero (numero) {
       resultadoPorcentagemEmString = resultadoPorcentagemEmString.replace('.',',');
     }
 
-    tela.textContent = resultadoPorcentagemEmString;
+    if (primeiroNumeroCalculoPorcentagem === undefined){
+      primeiroNumeroCalculoPorcentagem = 0;
+      numerosPressionados.length = 0;
+      tela.textContent = '0';
+      historicoCalculoAtual.textContent = primeiroNumeroCalculoPorcentagem;
+    }
+    else {
+      tela.textContent = resultadoPorcentagemEmString;
+      historicoCalculoAtual.textContent += resultadoPorcentagemEmString;
+    }
   });
   return tela.textContent;
 })();
