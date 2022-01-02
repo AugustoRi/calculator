@@ -13,7 +13,6 @@ function formatadorNumero (numero) {
   else {
     numero = parseInt(numero);
   }
-
   return numero;
 }; 
 
@@ -21,11 +20,6 @@ function formatadorNumero (numero) {
   numeros.forEach(numero => {
     numero.addEventListener('click', ()=>{
       numerosPressionados.push(numero.textContent);
-      if (numerosPressionados.length > 0) {
-        let zero = document.querySelector('#zero');
-        zero.disabled = false;
-        zero.enabled = true;
-      }
     });
   });
   return numerosPressionados;
@@ -34,17 +28,27 @@ function formatadorNumero (numero) {
 (function mostrarNumerosPressionados() {
   numeros.forEach(numero => {
     numero.addEventListener('click', ()=>{ 
-      if (numerosPressionados.length == 1) {
+      let zero = document.querySelector('#zero');
+      if (numerosPressionados.length > 0) {
+        zero.disabled = false;
+        zero.enabled = true;
+      }
+
+      let virgula = document.querySelector('#virgula');
+      if (tela.textContent.includes(',')) {
+        virgula.enabled = false;
+        virgula.disabled = true;
+      }
+
+      if (numerosPressionados.length == 1 && numerosPressionados[0] === ',') {
+        numerosPressionados[0] = '0,';
+        tela.textContent = numerosPressionados[0];
+      } 
+      else if (numerosPressionados.length === 1 && numerosPressionados[0] !== ',') {
         tela.textContent = tela.textContent.replace(tela.textContent, numerosPressionados[0]);
       }
       else {
         tela.textContent += numerosPressionados[numerosPressionados.length - 1];
-      }
-
-      if (tela.textContent.includes(',')) {
-        let virgula = document.querySelector('#virgula');
-        virgula.enabled = false;
-        virgula.disabled = true;
       }
     });
   }); 
@@ -109,6 +113,14 @@ function formatadorNumero (numero) {
   ce.addEventListener('click', ()=>{
     tela.textContent = 0;
     numerosPressionados.length = 0;
+    zero.disabled = true;
+    zero.enabled = false;
+    virgula.enabled = true;
+    virgula.disabled = false;
+    if (numerosPressionados.includes(',')) {
+      virgula.enabled = false;
+      virgula.disabled = true;
+    }
   });
 
   let c = document.querySelector('#limpa-tudo');
@@ -117,6 +129,15 @@ function formatadorNumero (numero) {
     tela.textContent = 0;
     historicoCalculoAtual.textContent = '';
     numerosPressionados.length = 0;
+    numerosParaCalculo.length = 0;
+    zero.disabled = true;
+    zero.enabled = false;
+    virgula.enabled = true;
+    virgula.disabled = false;
+    if (numerosPressionados.includes(',')) {
+      virgula.enabled = false;
+      virgula.disabled = true;
+    }
   });
 
   let backspace = document.querySelector('#backspace');
@@ -124,11 +145,22 @@ function formatadorNumero (numero) {
   backspace.addEventListener('click', ()=>{
     tela.textContent = '';
     numerosPressionados.pop();
+    if (numerosPressionados.includes(',')) {
+      virgula.enabled = false;
+      virgula.disabled = true;
+    }
+    else {
+      virgula.enabled = true;
+      virgula.disabled = false;
+    }
+
     for (let i = 0; i < numerosPressionados.length; i++) {
       tela.textContent += numerosPressionados[i];
     }
     if (numerosPressionados.length == 0) {
       tela.textContent = 0;
+      zero.disabled = true;
+      zero.enabled = false;
     }
   });
 })();
