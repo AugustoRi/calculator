@@ -5,6 +5,8 @@ const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
 const numerosParaCalculo = [];
 var sinal = '';
+var Escape = false;
+var Backspace = false;
 
 function formatadorNumero (numero) {
   if (numero.includes(',')) {
@@ -26,9 +28,7 @@ function formatadorNumero (numero) {
   return numerosPressionados;
 })();
 
-(function mostrarNumerosPressionados() {
-  numeros.forEach(numero => {
-    numero.addEventListener('click', ()=>{ 
+function mostrarNumerosPressionados() {
       let zero = document.querySelector('#zero');
       if (numerosPressionados.length > 0) {
         zero.disabled = false;
@@ -51,10 +51,34 @@ function formatadorNumero (numero) {
       else {
         tela.textContent += numerosPressionados[numerosPressionados.length - 1];
       }
-    });
-  }); 
   return tela.textContent;
-})();
+};
+
+numeros.forEach(numero => {
+  numero.addEventListener('click', ()=>{ 
+    mostrarNumerosPressionados();
+  });
+}); 
+
+function keyPressed(evt){
+  evt = evt || window.event;
+  var key = evt.key;
+  console.log(key);
+  return key; 
+};
+
+document.onkeydown = function (evt) {
+  let numerosParaEventosDoTeclado = [
+    '0','1','2','3','4','5','6','7','8','9',
+  ];
+  let str = keyPressed(evt);
+  for (let i = 0; i < numerosParaEventosDoTeclado.length; i++) {
+    if (str === numerosParaEventosDoTeclado[i]) {
+      numerosPressionados.push(str);
+      mostrarNumerosPressionados();
+    };
+  };
+};
 
 (function detectarOperacao() {
   operacoes.forEach(operacao => {
