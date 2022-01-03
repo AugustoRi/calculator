@@ -4,6 +4,7 @@ const numeros = document.querySelectorAll('.numeros');
 const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
 const numerosParaCalculo = [];
+var sinal = '';
 
 function formatadorNumero (numero) {
   if (numero.includes(',')) {
@@ -60,23 +61,41 @@ function formatadorNumero (numero) {
     operacao.addEventListener('click', ()=>{
       let primeiroNumeroSemFormatacao = tela.textContent;
       numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
+      if (numerosParaCalculo.length % 2 === 0 && numerosParaCalculo.length > 0) {
+        resultado();
+      }
+      let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
+      let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
       numerosPressionados.length = 0;
       let i = numerosParaCalculo.length - 1;
       switch (operacao.textContent) {
         case '+':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} + `;
+          sinal = '+';
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
           break;
 
         case '-':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} - `;
+          sinal = '-';
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
           break;
 
         case 'x':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} x `;
+          sinal = 'x';
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
           break;
 
         case '/':
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ÷ `;
+          sinal = '/';
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+          break;
+
+        case '=':
+          if (numerosParaCalculo.length < 2) {
+            historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `
+          }
+          else {
+            historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
+          }
           break;
 
         default:
@@ -86,6 +105,29 @@ function formatadorNumero (numero) {
   });
   return historicoCalculoAtual.textContent;
 })();
+
+function resultado() {
+  var resultadoCalculo = 0;
+
+  let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
+  let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 1];
+
+  if (sinal === '+') {
+    resultadoCalculo = primeiroNumero + segundoNumero;
+  }
+  else if (sinal === '-') {
+    resultadoCalculo = primeiroNumero - segundoNumero;
+  }
+  else if (sinal === 'x') {
+    resultadoCalculo = primeiroNumero * segundoNumero;
+  }
+  else if (sinal === '/') {
+    resultadoCalculo = primeiroNumero / segundoNumero;
+  }
+
+  tela.textContent = resultadoCalculo;
+  numerosParaCalculo.push(resultadoCalculo);
+};
 
 (function porcentagem() {
   let botaoPorcentagem = document.querySelector('#porcentagem');
