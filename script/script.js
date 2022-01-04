@@ -5,6 +5,7 @@ const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
 const numerosParaCalculo = [];
 var sinal = '';
+var sinalUsuario = '';
 
 function formatadorNumero (numero) {
   if (numero.includes(',')) {
@@ -61,14 +62,10 @@ numeros.forEach(numero => {
 function keyPressed(evt){
   evt = evt || window.event;
   var key = evt.key;
-  //console.log(key);
   return key; 
 };
 
 document.onkeydown = function (evt) {
-  let numerosParaEventosDoTeclado = [
-    '0','1','2','3','4','5','6','7','8','9',
-  ];
   let str = keyPressed(evt);
   if (str === 'Escape'){
     limpaC();
@@ -76,63 +73,84 @@ document.onkeydown = function (evt) {
   else if (str === 'Backspace') {
     BackSpace();
   }
+
+  let numerosParaEventosDoTeclado = [
+    '0','1','2','3','4','5','6','7','8','9',
+  ];
+
   for (let i = 0; i < numerosParaEventosDoTeclado.length; i++) {
     if (str === numerosParaEventosDoTeclado[i]) {
       numerosPressionados.push(str);
       mostrarNumerosPressionados();
     };
   };
+
+  let operacoes = [
+    '+','-','*','/','=','Enter',
+  ];
+
+  for (let i = 0; i < operacoes.length; i++) {
+    if (str === operacoes[i]) {
+      sinalUsuario = str;
+      if (sinalUsuario === '*') {
+        sinalUsuario = 'x';
+      }
+      detectarOperacao(sinalUsuario);
+    };
+  }
 };
 
-(function detectarOperacao() {
-  operacoes.forEach(operacao => {
-    operacao.addEventListener('click', ()=>{
-      let primeiroNumeroSemFormatacao = tela.textContent;
-      numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
-      if (numerosParaCalculo.length % 2 === 0 && numerosParaCalculo.length > 0) {
-        resultado();
-      }
-      let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
-      let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
-      numerosPressionados.length = 0;
-      let i = numerosParaCalculo.length - 1;
-      switch (operacao.textContent) {
-        case '+':
-          sinal = '+';
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-          break;
+function detectarOperacao(value) {
+    let primeiroNumeroSemFormatacao = tela.textContent;
+    numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
+    if (numerosParaCalculo.length % 2 === 0 && numerosParaCalculo.length > 0) {
+      resultado();
+    }
+    let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
+    let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
+    numerosPressionados.length = 0;
+    let i = numerosParaCalculo.length - 1;
+    switch (value) {
+      case '+':
+        sinal = '+';
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+        break;
 
-        case '-':
-          sinal = '-';
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-          break;
+      case '-':
+        sinal = '-';
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+        break;
 
-        case 'x':
-          sinal = 'x';
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-          break;
+      case 'x':
+        sinal = 'x';
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+        break;
 
-        case '/':
-          sinal = '/';
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-          break;
+      case '/':
+        sinal = '/';
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+        break;
 
-        case '=':
-          if (numerosParaCalculo.length < 2) {
-            historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `
-          }
-          else {
-            historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
-          }
-          break;
+      case '=':
+        if (numerosParaCalculo.length < 2) {
+          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `
+        }
+        else {
+          historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
+        }
+        break;
 
-        default:
-          break;
-      };
-    });
+      default:
+        break;
+    };
+return historicoCalculoAtual.textContent;
+};
+
+operacoes.forEach(operacao => {
+  operacao.addEventListener('click', ()=>{
+    detectarOperacao(operacao.textContent);
   });
-  return historicoCalculoAtual.textContent;
-})();
+});
 
 function resultado() {
   var resultadoCalculo = 0;
