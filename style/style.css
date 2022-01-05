@@ -38,6 +38,10 @@ header{
 header h1{
   color: #EAF3F5;
   font-size: 3em;
+  text-overflow:clip;
+  white-space: nowrap;
+  max-width: 300px;
+  overflow: hidden;
 }
 
 header span{
@@ -73,4 +77,10 @@ main{
 .calculadora-wrap #porcentagem,
 .calculadora-wrap #igual{
   color: #838F9A;
+}
+
+@media screen and (max-width: 400px) {
+  .calculadora-wrap button{
+    width: 15vw;
+  }
 }

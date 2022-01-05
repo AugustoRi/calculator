@@ -4,6 +4,7 @@ const numeros = document.querySelectorAll('.numeros');
 const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
 const numerosParaCalculo = [];
+var resultadoCalculo = 0;
 var sinal = '';
 var sinalUsuario = '';
 
@@ -95,55 +96,61 @@ document.onkeydown = function (evt) {
       if (sinalUsuario === '*') {
         sinalUsuario = 'x';
       }
+      if (sinalUsuario === 'Enter') {
+        sinalUsuario = '=';
+      }
       detectarOperacao(sinalUsuario);
     };
   }
 };
 
 function detectarOperacao(value) {
+  if (numerosPressionados.length !== 0) {
     let primeiroNumeroSemFormatacao = tela.textContent;
     numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
-    if (numerosParaCalculo.length % 2 === 0 && numerosParaCalculo.length > 0) {
-      resultado();
-    }
-    let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
-    let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
-    numerosPressionados.length = 0;
-    let i = numerosParaCalculo.length - 1;
-    switch (value) {
-      case '+':
-        sinal = '+';
-        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-        break;
+  }
+  if (numerosParaCalculo.length % 2 === 0) {
+    resultado();
+  }
+  let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
+  let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
 
-      case '-':
-        sinal = '-';
-        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-        break;
+  numerosPressionados.length = 0;
+  let i = numerosParaCalculo.length - 1;
+  switch (value) {
+    case '+':
+      sinal = '+';
+      historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+      break;
 
-      case 'x':
-        sinal = 'x';
-        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-        break;
+    case '-':
+      sinal = '-';
+      historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+      break;
 
-      case '/':
-        sinal = '/';
-        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
-        break;
+    case 'x':
+      sinal = 'x';
+      historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+      break;
 
-      case '=':
-        if (numerosParaCalculo.length < 2) {
-          historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `
-        }
-        else {
-          historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
-        }
-        break;
+    case '/':
+      sinal = '/';
+      historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} ${sinal} `;
+      break;
 
-      default:
-        break;
-    };
-return historicoCalculoAtual.textContent;
+    case '=':
+      if (numerosParaCalculo.length <= 1) {
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `;
+      }
+      else if ((numerosParaCalculo.length - 1) % 2 === 0) {
+        historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
+      }
+      break;
+
+    default:
+      break;
+  };
+  return historicoCalculoAtual.textContent;
 };
 
 operacoes.forEach(operacao => {
@@ -153,8 +160,6 @@ operacoes.forEach(operacao => {
 });
 
 function resultado() {
-  var resultadoCalculo = 0;
-
   let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
   let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 1];
 
