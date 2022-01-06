@@ -28,38 +28,6 @@ function formatadorNumero (numero) {
   return numerosPressionados;
 })();
 
-function mostrarNumerosPressionados() {
-      let zero = document.querySelector('#zero');
-      if (numerosPressionados.length > 0) {
-        zero.disabled = false;
-        zero.enabled = true;
-      }
-
-      let virgula = document.querySelector('#virgula');
-      if (tela.textContent.includes(',')) {
-        virgula.enabled = false;
-        virgula.disabled = true;
-      }
-
-      if (numerosPressionados.length == 1 && numerosPressionados[0] === ',') {
-        numerosPressionados[0] = '0,';
-        tela.textContent = numerosPressionados[0];
-      } 
-      else if (numerosPressionados.length === 1 && numerosPressionados[0] !== ',') {
-        tela.textContent = tela.textContent.replace(tela.textContent, numerosPressionados[0]);
-      }
-      else {
-        tela.textContent += numerosPressionados[numerosPressionados.length - 1];
-      }
-  return tela.textContent;
-};
-
-numeros.forEach(numero => {
-  numero.addEventListener('click', ()=>{ 
-    mostrarNumerosPressionados();
-  });
-}); 
-
 function keyPressed(evt){
   evt = evt || window.event;
   var key = evt.key;
@@ -86,6 +54,16 @@ document.onkeydown = function (evt) {
     };
   };
 
+  let float = ','
+
+  if (str === '.') {
+    str = float;
+  }
+  if (str === float && numerosPressionados.includes(',') === false && numerosPressionados.includes('0,') === false) {
+    numerosPressionados.push(str);
+    mostrarNumerosPressionados();
+  }
+
   let operacoes = [
     '+','-','*','/','=','Enter',
   ];
@@ -103,6 +81,38 @@ document.onkeydown = function (evt) {
     };
   }
 };
+
+function mostrarNumerosPressionados() {
+  if (numerosPressionados.length == 1 && numerosPressionados[0] === ',') {
+    numerosPressionados[0] = '0,';
+    tela.textContent = numerosPressionados[0];
+  } 
+  else if (numerosPressionados.length === 1 && numerosPressionados[0] !== ',') {
+    tela.textContent = tela.textContent.replace(tela.textContent, numerosPressionados[0]);
+  }
+  else {
+    tela.textContent += numerosPressionados[numerosPressionados.length - 1];
+  }
+  let zero = document.querySelector('#zero');
+  if (numerosPressionados.length > 0) {
+    zero.disabled = false;
+    zero.enabled = true;
+  }
+
+  let virgula = document.querySelector('#virgula');
+  if (numerosPressionados.includes(',')) {
+    console.log('possue');
+    virgula.enabled = false;
+    virgula.disabled = true;
+  }
+  return tela.textContent;
+};
+
+numeros.forEach(numero => {
+  numero.addEventListener('click', ()=>{ 
+    mostrarNumerosPressionados();
+  });
+}); 
 
 function detectarOperacao(value) {
   if (numerosPressionados.length !== 0) {
