@@ -1,12 +1,30 @@
 const tela = document.querySelector('#tela');
 const historicoCalculoAtual = document.querySelector('#historico-calculo-atual');
+
+
 const numeros = document.querySelectorAll('.numeros');
 const operacoes = document.querySelectorAll('.operacoes');
 const numerosPressionados = [];
 const numerosParaCalculo = [];
+
+
 var resultadoCalculo = 0;
 var sinal = '';
 var sinalUsuario = '';
+
+function habilitarCaracter (pontuacao) {
+  pontuacao.disabled = false;
+  pontuacao.enabled = true;
+
+  return pontuacao;
+}
+
+function desabilitarCaracter (pontuacao) {
+  pontuacao.disabled = true;
+  pontuacao.enabled = false;
+
+  return pontuacao;
+}
 
 function formatadorNumero (numero) {
   if (numero.includes(',')) {
@@ -19,70 +37,90 @@ function formatadorNumero (numero) {
   return numero;
 }; 
 
+function detectarNumeroParaCalculo (numero) {
+  numerosParaCalculo.push(formatadorNumero(numero));
+}
+
 (function preencherNumerosPressionados() {
   numeros.forEach(numero => {
     numero.addEventListener('click', ()=>{
-      numerosPressionados.push(numero.textContent);
+      if (numerosPressionados.length < 10) {
+        numerosPressionados.push(numero.textContent);
+        mostrarNumerosPressionados();
+        console.log(numerosPressionados);
+      }
     });
   });
   return numerosPressionados;
 })();
 
-function keyPressed(evt){
-  evt = evt || window.event;
-  var key = evt.key;
-  return key; 
-};
+// function keyPressed(evt){
+//   evt = evt || window.event;
+//   var key = evt.key;
+//   return key; 
+// };
 
-document.onkeydown = function (evt) {
-  let str = keyPressed(evt);
-  if (str === 'Escape'){
-    limpaC();
-  }
-  else if (str === 'Backspace') {
-    BackSpace();
-  }
+// document.onkeydown = function (evt) {
+//   let str = keyPressed(evt);
+//   if (str === 'Escape'){
+//     limpaC();
+//   }
+//   else if (str === 'Backspace') {
+//     BackSpace();
+//   }
 
-  let numerosParaEventosDoTeclado = [
-    '0','1','2','3','4','5','6','7','8','9',
-  ];
+//   let numerosParaEventosDoTeclado = [
+//     '0','1','2','3','4','5','6','7','8','9',
+//   ];
 
-  for (let i = 0; i < numerosParaEventosDoTeclado.length; i++) {
-    if (str === numerosParaEventosDoTeclado[i]) {
-      numerosPressionados.push(str);
-      mostrarNumerosPressionados();
-    };
-  };
+//   for (let i = 0; i < numerosParaEventosDoTeclado.length; i++) {
+//     if (str === numerosParaEventosDoTeclado[i]) {
+//       numerosPressionados.push(str);
+//       mostrarNumerosPressionados();
+//     };
+//   };
 
-  let float = ','
+//   let float = ','
 
-  if (str === '.') {
-    str = float;
-  }
-  if (str === float && numerosPressionados.includes(',') === false && numerosPressionados.includes('0,') === false) {
-    numerosPressionados.push(str);
-    mostrarNumerosPressionados();
-  }
+//   if (str === '.') {
+//     str = float;
+//   }
+//   if (str === float && numerosPressionados.includes(',') === false && numerosPressionados.includes('0,') === false) {
+//     numerosPressionados.push(str);
+//     mostrarNumerosPressionados();
+//   }
 
-  let operacoes = [
-    '+','-','*','/','=','Enter',
-  ];
+//   let operacoes = [
+//     '+','-','*','/','=','Enter',
+//   ];
 
-  for (let i = 0; i < operacoes.length; i++) {
-    if (str === operacoes[i]) {
-      sinalUsuario = str;
-      if (sinalUsuario === '*') {
-        sinalUsuario = 'x';
-      }
-      if (sinalUsuario === 'Enter') {
-        sinalUsuario = '=';
-      }
-      detectarOperacao(sinalUsuario);
-    };
-  }
-};
+//   for (let i = 0; i < operacoes.length; i++) {
+//     if (str === operacoes[i]) {
+//       sinalUsuario = str;
+//       if (sinalUsuario === '*') {
+//         sinalUsuario = 'x';
+//       }
+//       if (sinalUsuario === 'Enter') {
+//         sinalUsuario = '=';
+//       }
+//       detectarOperacao(sinalUsuario);
+//     };
+//   }
+// };
+
 
 function mostrarNumerosPressionados() {
+  let zero = document.querySelector('#zero');
+  let virgula = document.querySelector('#virgula');
+
+  if (numerosPressionados.length > 0) {
+    habilitarCaracter(zero);
+  }
+  
+  if (numerosPressionados.includes(',')) {
+    desabilitarCaracter(virgula);
+  }
+  
   if (numerosPressionados.length == 1 && numerosPressionados[0] === ',') {
     numerosPressionados[0] = '0,';
     tela.textContent = numerosPressionados[0];
@@ -93,40 +131,23 @@ function mostrarNumerosPressionados() {
   else {
     tela.textContent += numerosPressionados[numerosPressionados.length - 1];
   }
-  let zero = document.querySelector('#zero');
-  if (numerosPressionados.length > 0) {
-    zero.disabled = false;
-    zero.enabled = true;
-  }
 
-  let virgula = document.querySelector('#virgula');
-  if (numerosPressionados.includes(',')) {
-    console.log('possue');
-    virgula.enabled = false;
-    virgula.disabled = true;
-  }
   return tela.textContent;
 };
 
-numeros.forEach(numero => {
-  numero.addEventListener('click', ()=>{ 
-    mostrarNumerosPressionados();
-  });
-}); 
-
 function detectarOperacao(value) {
+
   if (numerosPressionados.length !== 0) {
-    let primeiroNumeroSemFormatacao = tela.textContent;
-    numerosParaCalculo.push(formatadorNumero(primeiroNumeroSemFormatacao));
+    detectarNumeroParaCalculo(tela.textContent);
   }
+  
   if (numerosParaCalculo.length % 2 === 0) {
     resultado();
   }
-  let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 3];
-  let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
+  
+  // let i = numerosParaCalculo.length - 1;
+  // numerosPressionados.length = 0;
 
-  numerosPressionados.length = 0;
-  let i = numerosParaCalculo.length - 1;
   switch (value) {
     case '+':
       sinal = '+';
@@ -149,11 +170,12 @@ function detectarOperacao(value) {
       break;
 
     case '=':
-      if (numerosParaCalculo.length <= 1) {
-        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `;
+      if (numerosPressionados.length !== 0) {
+        numerosParaCalculo.push(tela.textContent);
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i - 2]} ${sinal} ${numerosParaCalculo[i - 1]} = `;
       }
-      else if ((numerosParaCalculo.length - 1) % 2 === 0) {
-        historicoCalculoAtual.textContent = `${primeiroNumero} ${sinal} ${segundoNumero} = `;
+      else {
+        historicoCalculoAtual.textContent = `${numerosParaCalculo[i]} = `
       }
       break;
 
@@ -169,9 +191,17 @@ operacoes.forEach(operacao => {
   });
 });
 
+
 function resultado() {
-  let primeiroNumero = numerosParaCalculo[numerosParaCalculo.length - 2];
-  let segundoNumero = numerosParaCalculo[numerosParaCalculo.length - 1];
+  let i = numerosParaCalculo.length - 1;
+
+  let primeiroNumero = numerosParaCalculo[i - 1];
+  let segundoNumero = numerosParaCalculo[i];
+
+  if (numerosParaCalculo.length <= 1) {
+    resultadoCalculo = primeiroNumero;
+    return resultadoCalculo;
+  }
 
   if (sinal === '+') {
     resultadoCalculo = primeiroNumero + segundoNumero;
@@ -188,6 +218,7 @@ function resultado() {
 
   tela.textContent = resultadoCalculo;
   numerosParaCalculo.push(resultadoCalculo);
+  console.log(numerosParaCalculo)
 };
 
 (function porcentagem() {
