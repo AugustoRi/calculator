@@ -3,54 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora</title>
+  <title>Calculator</title>
   <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
-  <div class="body-calculadora">
-    <header>
-        <div class="container">
-          <h1 id="tela">0</h1>
-          <span id="historico-calculo-atual"></span>
-        </div><!--container-->
-    </header>
     <main>
-      <div class="calculadora-wrap">
-        <button class="limpadores" id="limpa">CE</button>
-        <button class="limpadores" id="limpa-tudo">C</button>
-        <button id="porcentagem">%</button>
-        <button class="operacoes" id="divisao">/</button>
-      </div><!--calculadora-wrap-->
+      <header>
+        <input type="text" id="screen" value="0" disabled />
+        <span id="calc-history"></span>
+      </header>
 
-      <div class="calculadora-wrap">
-        <button class="numeros">7</button>
-        <button class="numeros">8</button>
-        <button class="numeros">9</button>
-        <button class="operacoes" id="multiplicacao">x</button>
-      </div><!--calculadora-wrap-->
-
-      <div class="calculadora-wrap">
-        <button class="numeros">4</button>
-        <button class="numeros">5</button>
-        <button class="numeros">6</button>
-        <button class="operacoes" id="subtracao">-</button>
-      </div><!--calculadora-wrap-->
-
-      <div class="calculadora-wrap">
-        <button class="numeros">1</button>
-        <button class="numeros">2</button>
-        <button class="numeros">3</button>
-        <button class="operacoes" id="adicao">+</button>
-      </div><!--calculadora-wrap-->
-
-      <div class="calculadora-wrap">
-        <button class="numeros" id="zero" disabled>0</button>
-        <button class="numeros" id="virgula">,</button>
-        <button class="limpadores" id="backspace">⌫</button>
-        <button class="operacoes" id="igual">=</button>
-      </div><!--calculadora-wrap-->
+      <section class="calc-wrap">
+        <div class="calc-buttons">
+          <button class="limpadores" id="limpa">CE</button>
+          <button class="limpadores" id="limpa-tudo">C</button>
+          <button id="porcentagem">%</button>
+          <button class="operacoes" id="divisao">/</button>
+        </div>
+  
+        <div class="calc-buttons">
+          <button class="numeros">7</button>
+          <button class="numeros">8</button>
+          <button class="numeros">9</button>
+          <button class="operacoes" id="multiplicacao">x</button>
+        </div>
+  
+        <div class="calc-buttons">
+          <button class="numeros">4</button>
+          <button class="numeros">5</button>
+          <button class="numeros">6</button>
+          <button class="operacoes" id="subtracao">-</button>
+        </div>
+  
+        <div class="calc-buttons">
+          <button class="numeros">1</button>
+          <button class="numeros">2</button>
+          <button class="numeros">3</button>
+          <button class="operacoes" id="adicao">+</button>
+        </div>
+  
+        <div class="calc-buttons">
+          <button class="numeros" id="zero" disabled>0</button>
+          <button class="numeros" id="virgula">,</button>
+          <button class="limpadores" id="backspace">⌫</button>
+          <button class="operacoes" id="igual">=</button>
+        </div>
+      </section>
     </main>
-  </div><!--body-calculadora-->
   <script src="./script/script.js"></script>
 </body>
 </html>
