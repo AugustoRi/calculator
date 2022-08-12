@@ -25,19 +25,6 @@
 //   return pontuacao;
 // }
 
-// function formatadorNumero (numero) {
-//   const includes = numero.includes(",");
-//   if (!includes) {
-//     numero = parseInt(numero);
-//     return numero;
-//   };
-
-//   numero = numero.replace(',', '.');
-//   numero = parseFloat(numero);
-  
-//   return numero;
-// }; 
-
 // function detectarNumeroParaCalculo (numero) {
 //   numerosParaCalculo.push(formatadorNumero(numero));
 // }
@@ -373,3 +360,127 @@
 //   }
 // };
 
+const screen = document.querySelector("#screen");
+const calcHistory = document.querySelector("#calc-history");
+
+const numbers = document.querySelectorAll(".numbers");
+const operations = document.querySelectorAll(".operations");
+
+const actualNumbers = [];
+
+const disableChar = (char) => {
+  char.disabled = true;
+  char.enabled = false;
+
+  return char;
+};
+
+const enableChar = (char) => {
+  char.enabled = true;
+  char.disabled = false;
+
+  return char;
+};
+
+const limpaCE = (zero, comma) => {
+  screen.value = 0;
+  actualNumbers.length = 0;
+  disableChar(zero);
+  enableChar(comma);
+};
+
+const limpaC = (zero, comma) => {
+  screen.value = 0;
+  calcHistory.textContent = "";
+  actualNumbers.length = 0;
+  // numerosParaCalculo.length = 0;
+  disableChar(zero);
+  enableChar(comma);
+};
+
+const BackSpace = (zero, comma) => {
+  screen.value = "";
+  actualNumbers.pop();
+
+  if (!actualNumbers.includes(',')) {
+    enableChar(comma);
+  }
+
+  for (let i = 0; i < actualNumbers.length; i++) {
+    screen.value += actualNumbers[i];
+  };
+
+  if (actualNumbers.length == 0) {
+    screen.value = 0;
+    disableChar(zero);
+  };
+};
+
+(function clearFunctions() {
+  let zero = document.querySelector("#zero");
+  let comma = document.querySelector("#comma");
+
+  let ce = document.querySelector("#clear");
+  ce.addEventListener("click", () => {
+    limpaCE(zero, comma);
+  });
+
+  let c = document.querySelector("#clear-all");
+  c.addEventListener("click", () => {
+    limpaC(zero, comma);
+  });
+
+  let backspace = document.querySelector("#backspace");
+  backspace.addEventListener("click", () => {
+    BackSpace(zero, comma);
+  });
+})();
+
+const formatTheNumber = (number) => {
+  const includes = number.includes(",");
+  if (!includes) {
+    number = parseInt(number);
+    return number;
+  };
+
+  number = number.replace(',', '.');
+  number = parseFloat(number);
+  
+  return number;
+};
+
+numbers.forEach((number) => {
+  number.addEventListener("click", () => {
+    if (actualNumbers.length === 10) return;
+    actualNumbers.push(number.textContent);
+    console.log(actualNumbers)
+  });
+});
+
+const showNumbersPressed = () => {
+  let zero = document.querySelector("#zero");
+  let comma = document.querySelector("#comma");
+  let reg = new RegExp("^[0-9]*$");
+
+  actualNumbers.includes("0") && actualNumbers.length < 1 ? disableChar(zero) : enableChar(zero);
+  actualNumbers.includes(",") ? disableChar(comma) : enableChar(comma);
+
+  if (actualNumbers.length === 1 && reg.test(actualNumbers[0])) {
+    screen.value = actualNumbers[0];
+    return;
+  }
+
+  if (screen.value == 0 && actualNumbers.length === 1) {
+    actualNumbers.unshift("0");
+  }
+  
+  screen.value += actualNumbers[actualNumbers.length - 1];
+
+  return screen.value;
+};
+
+numbers.forEach((number) => {
+  number.addEventListener("click", () => {
+    showNumbersPressed();
+  });
+});

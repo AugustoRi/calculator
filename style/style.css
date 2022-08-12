@@ -33,19 +33,19 @@ main {
 header {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 
   width: 100%;
+  padding: 6%;
 }
 
 header input[type="text"] {
   overflow: hidden;
   border: none;
   border-radius: 1.5rem;
-  padding: 6%;
   width: 100%;
-  /* background-color: #354050; */
+  background-color: #354050;
 
   text-align: right;
   color: #EAF3F5;
@@ -56,7 +56,8 @@ header input[type="text"] {
 
 header span {
   color: #66727E;
-  font-size: 1em;
+  font-size: 1.5em;
+  padding-right: 2%;
 }
 
 .calc-wrap {
@@ -92,10 +93,10 @@ header span {
   cursor: pointer;
 }
 
-.calc-buttons .operacoes,
-.calc-buttons .limpadores,
-.calc-buttons #porcentagem,
-.calc-buttons #igual {
+.calc-buttons .clears,
+.calc-buttons .operations,
+.calc-buttons #percentage,
+.calc-buttons #equal {
   color: #838F9A;
 }
 
