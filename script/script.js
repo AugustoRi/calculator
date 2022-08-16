@@ -366,7 +366,8 @@ const calcHistory = document.querySelector("#calc-history");
 const numbers = document.querySelectorAll(".numbers");
 const operations = document.querySelectorAll(".operations");
 
-const actualNumbers = [];
+const actualScreen = [],
+      numbersToCalc = [];
 
 const disableChar = (char) => {
   char.disabled = true;
@@ -382,9 +383,22 @@ const enableChar = (char) => {
   return char;
 };
 
+const formatTheNumber = (number) => {
+  const includes = number.includes(",");
+  if (!includes) {
+    number = parseInt(number);
+    return number;
+  };
+
+  number = number.replace(",", ".");
+  number = parseFloat(number);
+  
+  return number;
+};
+
 const limpaCE = (zero, comma) => {
   screen.value = 0;
-  actualNumbers.length = 0;
+  actualScreen.length = 0;
   disableChar(zero);
   enableChar(comma);
 };
@@ -392,25 +406,25 @@ const limpaCE = (zero, comma) => {
 const limpaC = (zero, comma) => {
   screen.value = 0;
   calcHistory.textContent = "";
-  actualNumbers.length = 0;
-  // numerosParaCalculo.length = 0;
+  actualScreen.length = 0;
+  numbersToCalc.length = 0;
   disableChar(zero);
   enableChar(comma);
 };
 
 const BackSpace = (zero, comma) => {
   screen.value = "";
-  actualNumbers.pop();
+  actualScreen.pop();
 
-  if (!actualNumbers.includes(',')) {
+  if (!actualScreen.includes(',')) {
     enableChar(comma);
   }
 
-  for (let i = 0; i < actualNumbers.length; i++) {
-    screen.value += actualNumbers[i];
-  };
+  actualScreen.map((number) => {
+    screen.value += number;
+  });
 
-  if (actualNumbers.length == 0) {
+  if (actualScreen.length == 0) {
     screen.value = 0;
     disableChar(zero);
   };
@@ -436,24 +450,11 @@ const BackSpace = (zero, comma) => {
   });
 })();
 
-const formatTheNumber = (number) => {
-  const includes = number.includes(",");
-  if (!includes) {
-    number = parseInt(number);
-    return number;
-  };
-
-  number = number.replace(',', '.');
-  number = parseFloat(number);
-  
-  return number;
-};
-
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
-    if (actualNumbers.length === 10) return;
-    actualNumbers.push(number.textContent);
-    console.log(actualNumbers)
+    if (actualScreen.length === 10) return;
+    actualScreen.push(number.textContent);
+    console.log(actualScreen)
   });
 });
 
@@ -462,19 +463,19 @@ const showNumbersPressed = () => {
   let comma = document.querySelector("#comma");
   let reg = new RegExp("^[0-9]*$");
 
-  actualNumbers.includes("0") && actualNumbers.length < 1 ? disableChar(zero) : enableChar(zero);
-  actualNumbers.includes(",") ? disableChar(comma) : enableChar(comma);
+  actualScreen.includes("0") && actualScreen.length < 1 ? disableChar(zero) : enableChar(zero);
+  actualScreen.includes(",") ? disableChar(comma) : enableChar(comma);
 
-  if (actualNumbers.length === 1 && reg.test(actualNumbers[0])) {
-    screen.value = actualNumbers[0];
+  if (actualScreen.length === 1 && reg.test(actualScreen[0])) {
+    screen.value = actualScreen[0];
     return;
   }
 
-  if (screen.value == 0 && actualNumbers.length === 1) {
-    actualNumbers.unshift("0");
+  if (screen.value == 0 && actualScreen.length === 1) {
+    actualScreen.unshift("0");
   }
   
-  screen.value += actualNumbers[actualNumbers.length - 1];
+  screen.value += actualScreen[actualScreen.length - 1];
 
   return screen.value;
 };
@@ -482,5 +483,20 @@ const showNumbersPressed = () => {
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
     showNumbersPressed();
+  });
+});
+
+const storeTheNumber = (number) => {
+  if (actualScreen.length === 0) {
+    return;
+  };
+
+  actualScreen.length = 0;
+  return numbersToCalc.push(formatTheNumber(number));
+};
+
+operations.forEach((operation) => {
+  operation.addEventListener("click", () => {
+    storeTheNumber(screen.value);
   });
 });
