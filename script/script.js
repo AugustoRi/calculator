@@ -365,6 +365,7 @@ const calcHistory = document.querySelector("#calc-history");
 
 const numbers = document.querySelectorAll(".numbers");
 const operations = document.querySelectorAll(".operations");
+let signal = "";
 
 const actualScreen = [],
       numbersToCalc = [];
@@ -454,7 +455,7 @@ numbers.forEach((number) => {
   number.addEventListener("click", () => {
     if (actualScreen.length === 10) return;
     actualScreen.push(number.textContent);
-    console.log(actualScreen)
+    console.log(actualScreen);
   });
 });
 
@@ -495,8 +496,54 @@ const storeTheNumber = (number) => {
   return numbersToCalc.push(formatTheNumber(number));
 };
 
+const writeCalcHistory = (signal, showResultHistory = false, showHistoryLength = false) => {
+  if (showResultHistory) {
+    let firstNumber = numbersToCalc[numbersToCalc.length - 3];
+    let secondNumber = numbersToCalc[numbersToCalc.length - 2];
+    calcHistory.textContent = `${firstNumber} ${signal} ${secondNumber} =`;
+    numbersToCalc.length = 0;
+    return;
+  };
+
+  let number = numbersToCalc[numbersToCalc.length - 1];
+  calcHistory.textContent = `${number} ${signal}`;
+  return calcHistory.textContent;
+};
+
+const resultCalc = (signal) => {
+  let firstNumber = numbersToCalc[numbersToCalc.length - 2];
+  let secondNumber = numbersToCalc[numbersToCalc.length - 1];
+  let result;
+
+  switch (signal) {
+    case "+":
+      result = firstNumber + secondNumber;
+      break;
+    case "-":
+      result = firstNumber - secondNumber;
+      break;
+    case "x":
+      result = firstNumber * secondNumber;
+      break;
+    case "/":
+      result = firstNumber / secondNumber;
+      break;
+    default:
+      break;
+  };
+
+  numbersToCalc.push(result);
+  return screen.value = result;
+};
+
 operations.forEach((operation) => {
   operation.addEventListener("click", () => {
     storeTheNumber(screen.value);
+    if (numbersToCalc.length % 2 === 0) {
+      resultCalc(signal);
+    };
+    signal = operation.textContent;
+    writeCalcHistory(signal);
   });
 });
+
